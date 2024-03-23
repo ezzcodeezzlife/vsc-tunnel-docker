@@ -5,10 +5,10 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y curl tar git vim
 
 # Copy the script file from your host to the container
-##COPY install_packages.sh /tmp/
+COPY install_packages.sh /tmp/
 
-# Execute the script
-##RUN chmod +x /tmp/install_packages.sh && /tmp/install_packages.sh
+# Execute the script 
+RUN chmod +x /tmp/install_packages.sh && /tmp/install_packages.sh
 
 # Create a directory for the VS Code CLI
 RUN mkdir /vscode-cli

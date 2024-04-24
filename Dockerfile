@@ -2,13 +2,18 @@
 FROM ubuntu:latest
 
 # Update the system and install necessary packages
-RUN apt-get update && apt-get install -y curl tar git vim
+RUN apt-get update && apt-get install -y \
+    curl \
+    tar \
+    git \
+    vim \
+    wget \
+    unzip \
+    build-essential \
+    software-properties-common
 
-# Copy the script file from your host to the container
-COPY install_packages.sh /tmp/
-
-# Execute the script 
-RUN chmod +x /tmp/install_packages.sh && /tmp/install_packages.sh
+# Clean up APT when done to reduce image size
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Create a directory for the VS Code CLI
 RUN mkdir /vscode-cli
@@ -19,6 +24,9 @@ RUN tar -xf vscode_cli.tar.gz -C /vscode-cli
 
 # Set the working directory to the unpacked CLI
 WORKDIR /vscode-cli
+
+# Define a volume for persistent data
+VOLUME /vscode-cli/data
 
 # Start the VS Code Server and create a tunnel
 CMD ["./code", "tunnel", "--accept-server-license-terms"]
